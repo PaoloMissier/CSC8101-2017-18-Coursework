@@ -3,7 +3,7 @@
 ## Introduction
 In 2006 Netflix announced "The Netflix Prize", challenging teams of computer science researchers to produce an algorithm which predicted the movie ratings of netflix users with greater accuracy than Netflix's approach at the time.
 The prize of \$1,000,000 was eventually awarded in 2009 to a team from AT&T Labs.
-In this coursework, you will use the [Resilient Distributed Datastructures](http://spark.apache.org/docs/latest/programming-guide.html#resilient-distributed-datasets-rdds) and [Machine Learning algorithms](http://spark.apache.org/mllib/) provided by [Apache Spark](http://spark.apache.org) to do the same. 
+In this coursework, you will use the [Spark DataFrames](http://spark.apache.org/docs/latest/sql-programming-guide.html) and [Machine Learning algorithms](http://spark.apache.org/docs/latest/ml-guide.html) provided by [Apache Spark](http://spark.apache.org) to do the same. 
 Unfortunately ... there is no prize.
 
 ## The Data
@@ -54,8 +54,6 @@ The data provided to you is, apart from some minor modifications and the additio
 
 All the above datasets are stored in an amazon S3 bucket. When you start this coursework you should perform the following steps on your VM: 
 
-**Important**: Before you attempt these steps or any of those which follow in later sections, you must have followed the instructions to create an AWS VM [here](https://docs.google.com/document/d/1BVvOzFvUqhyxG76jG7GVX_GgHkc-eiaaNJMnhtlmdNM/edit#).
-
 1. Create and move into a data folder in your user's home directory with the following command: 
     ```
     mkdir ~/data && cd ~/data
@@ -96,22 +94,15 @@ Below are some helpful links:
 
 Below are a list of the individual tasks you will be expected to complete as part of your spark batch coursework. We try to describe each task in detail, however if you are ever in doubt please ask a demonstrator, either in person during a practical or by [creating an issue](https://github.com/tomncooper/CSC8101-Documentation/issues).
 
-#### Checkpoints
+#### Incremental progress
 
-A brief aside about checkpoints. As you can see, there are many tasks for you to complete in this coursework. Some of them may prove fairly challenging depending upon your prior level of experience. You may well not complete them all.
+As you can see, there are several tasks for you to complete in this coursework. Some of them may prove fairly challenging depending upon your prior level of experience. You may well not complete them all.
 However, we would like to avoid a situation in which students get stuck on task 1 or 2 and then either give up or struggle on for days, never attempting the later tasks. 
-So, we have marked certain tasks with the symbols **(\*)** and **(?)** which imply that the task is a checkpoint, or optional respectively.
+So, we have marked certain tasks with the symbol **(?)** which means  that the task is optional.
 
 **(?)** if a task is optional, this simply means that later tasks do not depend on its output. This means you can move on from such a task if you are stuck.
 To be clear, an optional task is still worth marks.
 
-**(\*)** if a task is checkpointed, this means that later tasks do depend on its output, but we have prepared sample files and short code snippets which allow you to simulate the correct output of such a task so that you may continue.
-
-If you want to take advantage of a checkpoint you must contact a demonstrator. 
-If you request the use of a checkpoint, but then later find the time to replace the checkpoint solution with your own attempt, do not worry that you will be marked down; all checkpoint solutions are sufficiently different from the actual solution that it will be obvious if they have been replaced.
-An example of a checkpoint might be a file containing the correct output from a task, and a code snippet to help you read that output into an `RDD` correctly.
-
-Obviously it should go without saying that you will not be awarded marks for tasks you do not attempt. Skipping even an optional task will mean you cannot get 100% for this coursework.
 
 #### Task 0
 
