@@ -84,7 +84,7 @@ Throughout this coursework you will need to refer heavily to documentation websi
 Below are some helpful links:
 
 * [Spark Programming Guide](https://spark.apache.org/docs/latest/programming-guide.html)
-* [Spark MLlib Programming Guide](https://spark.apache.org/docs/latest/mllib-guide.html)
+* [Spark MLlib Programming Guide](http://spark.apache.org/docs/latest/ml-guide.html)
 * [Neo4j Language Drivers](https://neo4j.com/developer/language-guides/)
 * [Neo4j Cypher Refcard](https://neo4j.com/docs/cypher-refcard/current/)
 
