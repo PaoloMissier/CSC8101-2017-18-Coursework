@@ -13,8 +13,4 @@ help from the demonstrators. This is primary way to get help on the coursework
 so please take advantage of these sessions.
 
 ## Spark Coursework
-
 [Coursework Specification](spark/spark-coursework-spec.md)
-
-[Coursework FAQ](spark/spark-faq.md)
-
