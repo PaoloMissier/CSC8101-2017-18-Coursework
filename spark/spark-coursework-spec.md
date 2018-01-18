@@ -162,9 +162,9 @@ The evaluation method you are using is called [Root Mean Squared Error](https://
 In order to calculate this value, intuitively, we need to predict ratings for `(Movie Id, User Id)` pairs where we already know what the real ratings are. 
 This is why you split your `RDD` of ratings back in Task 2 and only trained on 80% of the values; the other 20% is what you use to evaluate the results of this training!
 
-You should import `org.apache.spark.mllib.evaluation.RegressionMetrics` and read the [docs](https://spark.apache.org/docs/latest/mllib-evaluation-metrics.html#ranking-systems) closely.
+You should import `org.apache.spark.mllib.evaluation.RegressionMetrics` and read the [docs](https://spark.apache.org/docs/latest/ml-tuning.html) closely.
 One thing which is important to note is that you cannot pass the model produced by `ALS.train` to spark executors, which means you cannot simply call `model.predict` inside a function which you then `map` over the `RDD` of ratings. 
-Instead you must pass an `RDD[(User Id, Movie Id)]` to `predict`, which will return an `RDD` of ratings (i.e. a tuple 3 `(User Id, Movie Id, Rating)`) where the rating values themselves are predicitions.
+Instead you must pass an `RDD[(User Id, Movie Id)]` to `predict`, which will return an `RDD` of ratings (i.e. a tuple 3 `(User Id, Movie Id, Rating)`) where the rating values themselves are predictions.
 This can make it a little tricky to see how you relate the original (real) rating values to the predicited rating values.
 
 Once you have an RMSE score, perhaps try giving your spark `ALS.train` method different parameters to see how this affects the quality of the model produced.
