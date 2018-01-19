@@ -125,9 +125,7 @@ Instead you must use the `driver-memory` command line parameter for `spark-submi
 
 `$ pyspark --num-executors 5 --driver-memory 2g --executor-memory 2g`
     
-You can also develop you Python solution without using Jupyter notebooks, please refer to the [FAQ](spark-faq.md) for more details.
-
-A [python sample program](https://raw.githubusercontent.com/tomncooper/CSC8101-Documentation/master/spark/python-stub/SparkNeo4jSample.py) has been created for you as a starting point with [steps for local and cluster deployment](python-stub/python-deployment.md). This can be used a base for a Jupyter notebook or standard Python script.
+A [python sample program](https://raw.githubusercontent.com/tomncooper/CSC8101-Documentation/master/spark/python-stub/SparkNeo4jSample.py) has been created for you as a starting point. This can be used a base for a Jupyter notebook.
 
 
 #### Task 1 (\*)
