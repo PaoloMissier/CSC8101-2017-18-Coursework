@@ -243,13 +243,3 @@ At the end of your coursework efforts, you should gather as many of the followin
 * A `.txt` file containint all the Cypher read queries asked for in Task 7.
 
 The above files should in turn be placed within a file named `submission.zip` and uploaded to Ness.
-
-## Marks
-
-At the moment, we are not disclosing the exact mark allocation for each of the above tasks. Instead we will say that the
-sequence of tasks **0,1,2,5,6,7** represent the core of this coursework and as such are of particularly high importance.
-If you are short on time, you should focus your efforts on these. 
-
-Furthermore, to give you some indication of scale: if you complete tasks **0,1** & **2** perfectly, you will likely pass.
-
-Good luck :-)
