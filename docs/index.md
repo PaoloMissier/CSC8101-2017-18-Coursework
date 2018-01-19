@@ -1,5 +1,7 @@
 # CSC8101 Spark batch coursework
 
+
+
 ## Introduction
 In 2006 Netflix announced "The Netflix Prize", challenging teams of computer science researchers to produce an algorithm which predicted the movie ratings of netflix users with greater accuracy than Netflix's approach at the time.
 The prize of \$1,000,000 was eventually awarded in 2009 to a team from AT&T Labs.
