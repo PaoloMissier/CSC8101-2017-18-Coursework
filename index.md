@@ -78,8 +78,6 @@ All the above datasets are stored in an amazon S3 bucket. When you start this co
 
 **Note**: Throughout this coursework you should not need to modify any of the provided .txt files. Infact you must not, as one of the tasks towards the end of the coursework is to attempt to run your spark job on a Cluster, rather than a VM. On the cluster the data files will be provided for you, and therefore if your code assumes a modified structure it may not work. 
 
-**Note**: After Task ??? you will begin writing new nodes and relationships to your Neo4j database. However, you may not get this right first time. If you would like to undo any changes to the database, you may simply stop the database, delete the graph.db folder, repeate step 3 from above and then restart the database.
-
 ## Links
 
 Throughout this coursework you will need to refer heavily to documentation websites as well as the material (incl. books) mentioned in the lectures.
@@ -90,11 +88,11 @@ Below are some helpful links:
 * [Neo4j Language Drivers](https://neo4j.com/developer/language-guides/)
 * [Neo4j Cypher Refcard](https://neo4j.com/docs/cypher-refcard/current/)
 
-**Important**: You may notice that on the left hand side of the MLlib page there are links to two versions of each page, one under the heading "MLlib: Main Guide" and one under the heading "MLlib: RDD-based API Guide". You should **follow the RDD-based guide** as the other guide introduces a new API based upon the `DataSet` and `DataFrame` collection types, which are not covered by this course.
+**Important**: You may notice that on the left hand side of the MLlib page there are links to two versions of each page, one under the heading "MLlib: Main Guide" and one under the heading "MLlib: RDD-based API Guide". You should **follow the Main Guide** as the other guide is now deprecated..
 
 ## Tasks
 
-Below are a list of the individual tasks you will be expected to complete as part of your spark batch coursework. We try to describe each task in detail, however if you are ever in doubt please ask a demonstrator, either in person during a practical or by [creating an issue](https://github.com/tomncooper/CSC8101-Documentation/issues).
+Below are a list of the individual tasks you will be expected to complete as part of your spark batch coursework. We try to describe each task in detail, however if you are ever in doubt please ask a demonstrator during a practical.
 
 #### Incremental progress
 
@@ -106,17 +104,31 @@ So, we have marked certain tasks with the symbol **(?)** which means  that the t
 To be clear, an optional task is still worth marks.
 
 
-#### Task 0
+#### Task 0: Environment Setup
 
-The first thing you must do is download one of the spark batch project templates for working with [python](), [java]() or [scala]().
-If you are using python you may also use a python notebook as you have been shown in lectures.
+If you are planning to develop using Python, you can use a Jupyter notebook (like those used in the lectures) which is hosted on your VM. To start the notebook server log into your VM and run the following command:
 
-Once you have a project, create a spark context for use in all later operations. 
-To start with you should specify `local[2]` as the _master_ parameter, which indicates that spark will run on your VM rather than a cluster, and use two threads.
-We also advise setting the parameters _spark.driver.memory_ and _spark.executor.memory_ to `4g` and `2g` respectively.
+`$ pyspark`
 
-**Note**: When using submitting a spark job or starting a pyspark notebook to run spark jobs on your local VM you cannot configure `spark.driver.memory` using `SparkConf`. 
-Instead you must use the `driver-memory` command line parameter for `spark-submit`.
+You will not be able to enter any other commands in this console while the server is running. If you want to run commands on the VM while the notebook is running then login to your VM in a separate ssh session (on Windows you will need to start another putty session).
+
+Once the server is running you can open the notebook in your web browser at: 
+
+`<VM IP ADDRESS>:8888`
+
+Once on the Jupyter home page you can start a new notebook by going to the "New" menu in the top right and selecting "Python 3" under the notebook section. The code for your solution to the tasks below can be saved in this new notebook and started up again from the Jupyter homepage.
+
+Please note that in order for notebook to function properly with Spark, only one kernel (notebook) can be running at any one time. Use the "Running" tab on the Jupyter home page to check how many kernels are running. You may need to shut all kernels down and restart the notebook you are interested in, in order to get a functioning connection to Spark.
+ 
+When using submitting a spark job or starting a pyspark notebook to run spark jobs on your local VM you cannot configure `spark.driver.memory` using `SparkConf`. 
+Instead you must use the `driver-memory` command line parameter for `spark-submit` such as:
+
+`$ pyspark --num-executors 5 --driver-memory 2g --executor-memory 2g`
+    
+You can also develop you Python solution without using Jupyter notebooks, please refer to the [FAQ](spark-faq.md) for more details.
+
+A [python sample program](https://raw.githubusercontent.com/tomncooper/CSC8101-Documentation/master/spark/python-stub/SparkNeo4jSample.py) has been created for you as a starting point with [steps for local and cluster deployment](python-stub/python-deployment.md). This can be used a base for a Jupyter notebook or standard Python script.
+
 
 #### Task 1 (\*)
 
@@ -173,7 +185,7 @@ Once you have an RMSE score, perhaps try giving your spark `ALS.train` method di
 
 **Note**: `RDD`s **do not** guarantee ordering of elements.
 
-**Hint**: Remember the special operations on `RDD`s of pairs. Also note that `((Int, Int), Double)` is a pair, just a pair of `(Tuple2[Int], Double)`.
+**Hint**: Remember the special operations on `RDD`s of pairs.
 
 #### Task 5 (\*)
 
@@ -201,9 +213,7 @@ to which you can pass Cypher query strings using the `run` method. You should be
 time you want to run a query as this will teardown/startup the underlying connection, as well as prevent Neo4j from 
 performing transaction batching, which is important for write performance.
 
-You should write only a random 5% sample of the predicted ratings `RDD` to the Neo4j database. Doing otherwise in a 
-reasonable time would require a write rate which is hard for untuned instances of Neo4j to achieve (it offers ACID 
-semantics after all).
+You should write only a random 5% sample of the predicted ratings `RDD` to the Neo4j database.
 
 **Hint**: It may be easier to bring `RDD` contents to a session which you create on the driver, rather than attempting 
 to pass sessions to executors via a `map` function over an `RDD`. Look up the various methods for materialising `RDD`s
@@ -211,29 +221,10 @@ on the spark driver and try to pick the most efficient.
 
 #### Task 7 (?)
 
-In this task you should use the Neo4j web interface to create the following read queries over your new data: 
+In this task you should use the Neo4j web interface to create the following read query over your new data: 
 
 1. For a given director, returns all Users who have rated more than one of their movies at 4.0 or above (i.e. fans of that directors work).
 
-2. For a given actor, return other actors with whom they have collaborated on more than 3 movies (their "co-stars").
-
-3. For a given actor, returns users who highly rate movies in which their co-stars appear, but who has never rated a movie in which this actor has appeared.
-
-**Hint**: Remember that you can use multiple `MATCH` statements to build up complex query graphs.
-
-#### Task 8 (?)
-
-The final task is to try and run you spark job on an actual auto-scaling cluster, rather than on your VM. We have created
-an auto-scaling cluster which will be shared amongst all students on the module. As it turns out, this process can be 
-quite involved, and varies depending on your chosen language. 
-
-More detailed instructions for this final section will follow shortly. In the meantime, if you have questions, please approach a demonstrator.
-
-**Hint**: Despite running your spark job on a cluster, you will still need to write to the Neo4j instance on your VM. The 
-firewall has been set up appropriately to allow external access to Neo4j's bolt protocol, but you will need to program 
-your spark job to take command line arguments or configuration in order to change the bolt host uri from `localhost` toyour VM's public IP. Similarly, when running on a cluster your spark job will need different configuration arguments to be
-passed to the `SparkContext`, so these will need to be easily configurable as well. This is especially important if you
-have chosen to do the coursework in either Java or Scala, which require compilation steps.
 
 ## Deliverables
 
@@ -242,6 +233,6 @@ At the end of your coursework efforts, you should gather as many of the followin
 * A `.zip` file containing the src for the spark job
 * A `.txt` file containing the recommendations and ratings for user _30878_ (may be two `.txt` files).
 * A `.zip` file containing all the predicted ratings from `qualifying_simple.txt`. This is likely many text files of the form `part-0000.txt` etc...
-* A `.txt` file containint all the Cypher read queries asked for in Task 7.
+* A `.txt` file containing the Cypher read query asked for in Task 7.
 
 The above files should in turn be placed within a file named `submission.zip` and uploaded to Ness.
