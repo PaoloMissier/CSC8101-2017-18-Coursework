@@ -197,32 +197,6 @@ Once you have done this, you should write these ratings to a file.
 `part-0024.txt`. This is due to the fact that the contents of each `RDD` partition (remember that `RDD`s are partitioned 
 and distributed) are written out separately. You do not have to recombine these files.
 
-#### Task 6 (\*) 
-
-This task requires you to write some of these predicted ratings to the Neo4j database on your VM. 
-Each rating should be encoded as `Rating` relationship between a `User` node with the appropriate id and a `Movie` node with the appropriate title.
-If the `User` node does not exist (i.e. you have not already created it while writing an earlier rating) then you should create it.
-Note that you should only attempt to write ratings to Neo4j if the rating's movie id corresponds to a movie title which 
-already exists in the Neo4j database (**Hint**: remember your alias map from Task 1). 
-You should do this using Neo4j's custom binary protocol _bolt_, following the instructions for the appropriate [driver library](https://neo4j.com/developer/language-guides/).
-
-You will need to provide a bolt url in order to get a database driver object. From this object you can retrieve a session,
-to which you can pass Cypher query strings using the `run` method. You should be careful not to recreate the session each
-time you want to run a query as this will teardown/startup the underlying connection, as well as prevent Neo4j from 
-performing transaction batching, which is important for write performance.
-
-You should write only a random 5% sample of the predicted ratings `RDD` to the Neo4j database.
-
-**Hint**: It may be easier to bring `RDD` contents to a session which you create on the driver, rather than attempting 
-to pass sessions to executors via a `map` function over an `RDD`. Look up the various methods for materialising `RDD`s
-on the spark driver and try to pick the most efficient.
-
-#### Task 7 (?)
-
-In this task you should use the Neo4j web interface to create the following read query over your new data: 
-
-1. For a given director, returns all Users who have rated more than one of their movies at 4.0 or above (i.e. fans of that directors work).
-
 
 ## Deliverables
 
