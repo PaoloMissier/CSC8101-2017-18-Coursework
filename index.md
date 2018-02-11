@@ -70,6 +70,8 @@ All the above datasets are stored in an amazon S3 bucket. When you start this co
     ```
     wget https://s3-eu-west-1.amazonaws.com/csc8101-spark-assignment-data/name_of_the_file
     ``` 
+  
+  Note: the .parquet dataset is a tarfile consisting of an entire folder. Untar into the ~/data directory. This will create a sub-directory called `mv_sampled.parquet`
     
 **Note**: Throughout this coursework you should not need to modify any of the provided .txt files. Infact you must not, as one of the tasks towards the end of the coursework is to attempt to run your spark job on a Cluster, rather than a VM. On the cluster the data files will be provided for you, and therefore if your code assumes a modified structure it may not work. 
 
