@@ -5,11 +5,21 @@
 ## Introduction
 In 2006 Netflix announced "The Netflix Prize", challenging teams of computer science researchers to produce an algorithm which predicted the movie ratings of netflix users with greater accuracy than Netflix's approach at the time.
 The prize of \$1,000,000 was eventually awarded in 2009 to a team from AT&T Labs.
-In this coursework, you will use the [Spark DataFrames](http://spark.apache.org/docs/latest/sql-programming-guide.html) and [Machine Learning algorithms](http://spark.apache.org/docs/latest/ml-guide.html) provided by [Apache Spark](http://spark.apache.org) to do the same. 
-Unfortunately ... there is no prize.
+In this coursework, you will use the [Spark DataFrames](http://spark.apache.org/docs/latest/sql-programming-guide.html) and [Machine Learning algorithms](http://spark.apache.org/docs/latest/ml-guide.html) provided by [Apache Spark](http://spark.apache.org) to train a movies recommendation model on a subset of the original dataset used in the challenge.
 
 ## The Data
 The data provided to you is, apart from some minor modifications and the addition of a Neo4j database, the same data as used in the netflix prize. It consists of the following files:
+
+* **movie_titles_canonical.txt**: a text file containing roughly 13 thousand lines, one per movie, for example:
+    ```
+    Avatar,2009
+    Amélie,2001
+    Full Metal Jacket,1987
+    E.T.: The Extra-Terrestrial,1982
+    Independence Day,1996
+    The Matrix,1999
+    ```
+you will use this small dataset in Task 1.
 
 * **mv_all_simple.txt**: a text file containing roughly 100 million lines, corresponding to the same number of movie ratings. Each line is of the format `Movie Id, User Id, Rating, Rating Date`. For example: 
     ```
@@ -19,7 +29,14 @@ The data provided to you is, apart from some minor modifications and the additio
     1,30878,4,2005-12-26
     1,823519,3,2004-05-03
     ```
-    
+ 
+this dataset is used to train the recommender model in **Task 2**, however it is too large to be processed using a single node Spark deployment. It is there in case you want to attempt training on this full-size dataset (**Task2 2**) after you have completed your coursework.
+
+Instead you will use this smaller dataset:
+
+* **mv_sampled.parquet**: this is a subset of the whole ratings file, containing about 1 million ratings. You will use this file in **Task 2** to train your ASL model.
+Note that this is encoded using Spark's column-wise binary format for Dataframes (parquet), which makes it very space-efficient and fast to load. 
+
 * **netflix_movie_titles.txt**: a text file containing roughly 18 thousand lines, corresponding to the same number of movies. Each line is of the format `Id, Year of release, Title`. For example:
     ```
     1,2003,Dinosaur Planet
@@ -39,18 +56,6 @@ The data provided to you is, apart from some minor modifications and the additio
     1,513509,2005-07-04
     1,1086137,2005-09-21
     ```
-    
-* **graph.tgz**: a [sample graph database](https://neo4j.com/developer/movie-database/) provided by Neo4j themselves. This database contains movie data about movies, actors and directors pulled from [TheMovieDB](http://themoviedb.org/). The databases node types include `Person, Actor, Director, User, Movie`, along with the relationship types `ACTED_IN, DIRECTED, RATED`. The database is not a text file but rather an archive file containing a folder named `graph.db`.
- 
-* **movie_titles_canonical.txt**: a text file containing roughly 13 thousand lines, corresponding to the same number of movies. These movie titles have been pulled from the Neo4j TheMovieDB database. Each line is of the format `Title, Year of release`. For example:
-    ```
-    Avatar,2009
-    Amélie,2001
-    Full Metal Jacket,1987
-    E.T.: The Extra-Terrestrial,1982
-    Independence Day,1996
-    The Matrix,1999
-    ```
 
 #### Obtaining the data 
 
@@ -66,16 +71,6 @@ All the above datasets are stored in an amazon S3 bucket. When you start this co
     wget https://s3-eu-west-1.amazonaws.com/csc8101-spark-assignment-data/name_of_the_file
     ``` 
     
-3. Remove the old database files from Neo4j:
-    ```
-    sudo rm -rf /var/lib/neo4j/data/databases/graph.db
-    ```
-
-4. Unzip the `graph.tgz` file and move it to the location that Neo4j (pre-installed on your VMs) expects using the following command: 
-    ```
-    tar -xvf graph.tgz && sudo mv graph.db /var/lib/neo4j/data/databases/
-    ```
-
 **Note**: Throughout this coursework you should not need to modify any of the provided .txt files. Infact you must not, as one of the tasks towards the end of the coursework is to attempt to run your spark job on a Cluster, rather than a VM. On the cluster the data files will be provided for you, and therefore if your code assumes a modified structure it may not work. 
 
 ## Links
@@ -90,23 +85,20 @@ Below are some helpful links:
 
 **Important**: You may notice that on the left hand side of the MLlib page there are links to two versions of each page, one under the heading "MLlib: Main Guide" and one under the heading "MLlib: RDD-based API Guide". You should **follow the Main Guide** as the other guide is now deprecated..
 
-## Tasks
-
-Below are a list of the individual tasks you will be expected to complete as part of your spark batch coursework. We try to describe each task in detail, however if you are ever in doubt please ask a demonstrator during a practical.
-
 #### Incremental progress
 
-As you can see, there are several tasks for you to complete in this coursework. Some of them may prove fairly challenging depending upon your prior level of experience. You may well not complete them all.
-However, we would like to avoid a situation in which students get stuck on task 1 or 2 and then either give up or struggle on for days, never attempting the later tasks. 
-So, we have marked certain tasks with the symbol **(?)** which means  that the task is optional.
+As you can see below, there are several tasks for you to complete in this coursework. Some of them may prove challenging depending upon your prior level of experience.
+If you struggle with Task 1, you can re-start from Task 2 as this requires loading the **mv_sampled.parquet** and therefore does not require you to have completed Task 1.
 
-**(?)** if a task is optional, this simply means that later tasks do not depend on its output. This means you can move on from such a task if you are stuck.
-To be clear, an optional task is still worth marks.
+Additionally we have marked certain tasks with the symbol **(?)** which means  that the task is optional.
+if a task is optional, this simply means that later tasks do not depend on its output. This means you can move on from such a task if you are stuck.
+To be clear, you do not get marks for an optional task that you have not attempted.
 
+## Tasks
 
 #### Task 0: Environment Setup
 
-If you are planning to develop using Python, you can use a Jupyter notebook (like those used in the lectures) which is hosted on your VM. To start the notebook server log into your VM and run the following command:
+You should be using a pyspark Jupyter notebook (like those used in the lectures) which is hosted on your VM. To start the notebook server log into your VM and run the following command:
 
 `$ pyspark`
 
@@ -124,21 +116,29 @@ When using submitting a spark job or starting a pyspark notebook to run spark jo
 Instead you must use the `driver-memory` command line parameter for `spark-submit` such as:
 
 `$ pyspark --num-executors 5 --driver-memory 2g --executor-memory 2g`
-    
+
+this is useful of course if you find that your runtime struggles with the size of the input dataset.
+
 A [python sample program](https://raw.githubusercontent.com/tomncooper/CSC8101-Documentation/master/spark/python-stub/SparkNeo4jSample.py) has been created for you as a starting point. This can be used a base for a Jupyter notebook.
 
 
-#### Task 1 (\*)
+#### Task 1
+Input Files:
+- **netflix_movie_titles.txt**
+- **movie_titles_canonical.txt**
 
-You have been given an canonical list of movies (in `movie_titles_canonical.txt`), along with a list of the movies which appear in the netflix prize dataset.
+You have been given an canonical list of movies (in `movie_titles_canonical.txt`), along with a list of the movies which appear in the netflix prize dataset: `netflix_movie_titles.txt`.
 You must write a simple algorithm to determine where a movie title from the netflix dataset is an alias of a movie title from the canonical dataset.
 Some examples of aliases would be _"The Lion King"_ => _"Lion King"_, _"Up!"_ => _"Up"_ and _"The matrix"_ => _"The Matrix"_.
 
 The algorithm should be of your own design.
 It should be more complicated than just checking for string equality and probably less complicated than something like [Edit Distance](https://en.wikipedia.org/wiki/Edit_distance).
 Marks will be awarded for producing a sensible method which will catch most or all aliases, but also for considering the performance of your approach. 
-The final output of your algorithm should be a `Map[Int => String]` where each key is the id of a movie from the netflix dataset, and each string is the original title from the canonical dataset. 
-This map should be broadcast to all spark executors.
+The final output of your algorithm should be a dictionsry of the form:
+
+`{ <netflix movie ID>: <original title from canonical dataset}`
+
+This map should be `broadcast` to all spark executors.
 
 **Hint**: Don't forget you have dates.
 
