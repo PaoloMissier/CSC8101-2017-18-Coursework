@@ -215,14 +215,9 @@ and distributed) are written out separately. You do not have to recombine these 
 
 #### Task 7 (\*)
 
-The goal of this last task is to establish users similarity based on how they rate the same movies. 
+The goal of this last task is to establish users similarity based on how they rate the same movies, using the DataFrame that you created in Task 6. 
 
-More precisely, you will compute a user x user matrix `userSim` where `userSim(ui,uj)` holds the similarity between user ui and user uj.
-
-In this exercise, user similarity is defined as follows:
-- let M be the set of movies
-- let `rating(u,m)` be the predicted rating for user u and movie m
-- the set of highly rated movies for user u is defined as those movies rated 3 or above by u.
+In this exercise, the similarity between users (u1, u2) is defined as *the number of movies that both u1 and u2 rate at least 3.* .
 
 Your task is to find the top 10 most similar users to user *30878*.
 
