@@ -216,18 +216,17 @@ and distributed) are written out separately. You do not have to recombine these 
 #### Task 7 (\*)
 
 The goal of this last task is to establish users similarity based on how they rate the same movies. 
+
 More precisely, you will compute a user x user matrix `userSim` where `userSim(ui,uj)` holds the similarity between user ui and user uj.
 
 In this exercise, user similarity is defined as follows:
-- M be the set of movies
-- rating(u,m) be the predicted rating for user u and movie m
-- let hr(u) = | { m in M | rating(u,m) > 2 } |  be the set of movies that user u rates at least 3.
+- let M be the set of movies
+- let `rating(u,m)` be the predicted rating for user u and movie m
+- the set of highly rated movies for user u is defined as those movies rated 3 or above by u.
 
-Define sim(ui, uj) = | hr(ui) intersect hr(uj) | / | hr(ui) union hr(uj) |.
-That is, the similarity between any ui, uj is the *Jaccard distance* between ui and uj, defined as the size of the intersection of movies that are highly rated by both ui and uj, normalised by the size of their union.
+Your task is to find the top 10 most similar users to user *30878*.
 
-Your task is 
-
+**hint**: do not use explicit for loops. Instead, consider a Map Reduce pattern on the DataFrame that you created in Task 6.
 
 ## Deliverables
 
