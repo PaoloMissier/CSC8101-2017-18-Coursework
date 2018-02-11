@@ -171,6 +171,8 @@ For this task you will use the model you  generated in Taks 2 to recommend 10 mo
 The user in question has the id _30878_. Once you have used the model to retrieve the 10 recommended movie ids, you should use the alias map created earlier to retrieve their titles and write these recommendations to a file.
 To allow you to informally assess the quality of your predictive model you should also filter over the `RDD` containing actual ratings and write some  real ratings made by user _30878_ to another file.
 
+**Hint**: look at the `recommendForAllUsers` method available on the ` pyspark.ml.recommendation.ALSModel` class.
+
 **Hint**: Remember that most operations over an `RDD` or DataFrame are actually evaluated lazily, however there are some operations which will _force_ the datastructure.
 If you are going to _force_ an `RDD` in multiple different places, it is a good idea to `persist` it for performance.
 
@@ -191,7 +193,9 @@ In this task you will tune your model's hyperparameters:
 * _Number of Iterations_ = 5
 * _Lambda_ = 0.01 
 
-for this, build a `ParamGrid` in combination with the `CrossValidator` as seen in class.  
+for this, build a `ParamGrid` in combination with the `CrossValidator` as seen in class.
+
+See [here](http://spark.apache.org/docs/latest/ml-tuning.html) for documentation and examples.
 You should experiment with different parameter and report on the best performance you can achieve (best RMSE / r^2 correlation).
 
 #### Task 6 (\*)
@@ -208,6 +212,22 @@ Once you have done this, you should write these ratings to a file.
 **Note**: If you use spark's built in `saveAsTextFile` method, you will see that many files are produced, with names like
 `part-0024.txt`. This is due to the fact that the contents of each `RDD` partition (remember that `RDD`s are partitioned 
 and distributed) are written out separately. You do not have to recombine these files.
+
+#### Task 7 (\*)
+
+The goal of this last task is to establish users similarity based on how they rate the same movies. 
+More precisely, you will compute a user x user matrix `userSim` where `userSim(ui,uj)` holds the similarity between user ui and user uj.
+
+In this exercise, user similarity is defined as follows:
+- M be the set of movies
+- rating(u,m) be the predicted rating for user u and movie m
+- let hr(u) = | { m in M | rating(u,m) > 2 } |  be the set of movies that user u rates at least 3.
+
+Define sim(ui, uj) = | hr(ui) intersect hr(uj) | / | hr(ui) union hr(uj) |.
+That is, the similarity between any ui, uj is the *Jaccard distance* between ui and uj, defined as the size of the intersection of movies that are highly rated by both ui and uj, normalised by the size of their union.
+
+Your task is 
+
 
 ## Deliverables
 
