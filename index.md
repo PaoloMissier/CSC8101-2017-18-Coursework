@@ -143,18 +143,24 @@ This map should be `broadcast` to all spark executors.
 **Hint**: Don't forget you have dates.
 
 #### Task 2 (\*)
+Input File:
+- **mv_sampled.parquet**
 
-You must now use spark to load all the netflix ratings (in `mv_all_simple.txt`) into an `RDD`.
-This process will involve parsing the string form of each line into a more appropriate tuple or datatype.
-You must randomly split this `RDD` into two unequal `RDD`s (i.e. an 80/20 ratio). 
-Finally, you must import `mllib.recommendation.ALS` and pass one of these `RDD`s to the `ALS.train` method, producing a model object capable of predicting movie ratings by users. 
+You must now use spark to load the sampled netflix ratings (in `mv_sampled.parquet`) into a DataFrame (look up the very simple load commands for Parquet files).
+
+You must randomly split this DataFrame into two unequal DataFrames (i.e. an 80/20 ratio). 
+
+You should then use this DataFrame to train an ALS model that can be used to predict user movie ratings (ie which rating a user will give to a movie that they have not already rated).
+
+Remember Spark offers two ML libraries. You must use the newer one: 
+`from pyspark.ml.recommendation import ALS`
+`from pyspark.ml.recommendation import ALSModel`
+
 Initially, use the following values for the other parameters to `ALS.train`: 
 
 * _Rank_ = 10
 * _Number of Iterations_ = 5
 * _Lambda_ = 0.01 
-
-**Hint**: Be careful not to spend a long time replicating (possibly poorly) which already exists in Spark. In particular, make sure you are aware of all the methods available on `RDD`s.
 
 #### Task 3 (?)
 
