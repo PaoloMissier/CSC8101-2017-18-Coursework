@@ -163,46 +163,49 @@ Initially, use the following values for the other parameters to `ALS.train`:
 * _Lambda_ = 0.01 
 
 #### Task 3 (?)
+Input: Model from Task 2
 
-For this task you will use the previously generated model to recommend 10 movies to a specific user based on their predicted rating of said movies. 
+For this task you will use the model you  generated in Taks 2 to recommend 10 movies to a specific user based on their predicted rating of said movies. 
 The user in question has the id _30878_. Once you have used the model to retrieve the 10 recommended movie ids, you should use the alias map created earlier to retrieve their titles and write these recommendations to a file.
 To allow you to informally assess the quality of your predictive model you should also filter over the `RDD` containing actual ratings and write some  real ratings made by user _30878_ to another file.
 
-**Hint**: Again, don't reinvent the wheel. Also remember that most operations over an `RDD` are actually evaluated lazily, however there are some operations which will _force_ the datastructure.
+**Hint**: Remember that most operations over an `RDD` or DataFrame are actually evaluated lazily, however there are some operations which will _force_ the datastructure.
 If you are going to _force_ an `RDD` in multiple different places, it is a good idea to `persist` it for performance.
 
 #### Task 4 (?)
 
-This next task involves more formal evaluation of the model which you produced in Task 2, rather than just "eyeballing" the output for a single user.
+This next task is a quantitative evaluation of the model which you produced in Task 2, rather than just "eyeballing" the output for a single user.
 In spark there exist several evaluation methods for both binary classification and regression models. As we are predicting something which may take any value between 0.0 and 5.0 (i.e. a rating) we producing a regression model.
 
-The evaluation method you are using is called [Root Mean Squared Error](https://en.wikipedia.org/wiki/Mean_squared_error), and is related to calculating the standard deviation between predicted and actual values.
-In order to calculate this value, intuitively, we need to predict ratings for `(Movie Id, User Id)` pairs where we already know what the real ratings are. 
-This is why you split your `RDD` of ratings back in Task 2 and only trained on 80% of the values; the other 20% is what you use to evaluate the results of this training!
+You will use Root Mean Squared Error (RMSE) as described in the example notebooks from class. This involves predict ratings for `(Movie Id, User Id)` *on the evalation set you set aside in Task 2.*
 
-You should import `org.apache.spark.mllib.evaluation.RegressionMetrics` and read the [docs](https://spark.apache.org/docs/latest/ml-tuning.html) closely.
-One thing which is important to note is that you cannot pass the model produced by `ALS.train` to spark executors, which means you cannot simply call `model.predict` inside a function which you then `map` over the `RDD` of ratings. 
-Instead you must pass an `RDD[(User Id, Movie Id)]` to `predict`, which will return an `RDD` of ratings (i.e. a tuple 3 `(User Id, Movie Id, Rating)`) where the rating values themselves are predictions.
-This can make it a little tricky to see how you relate the original (real) rating values to the predicited rating values.
-
-Once you have an RMSE score, perhaps try giving your spark `ALS.train` method different parameters to see how this affects the quality of the model produced.
-
-**Note**: `RDD`s **do not** guarantee ordering of elements.
-
-**Hint**: Remember the special operations on `RDD`s of pairs.
+You should use the `RegressionEvaluator` as illustrated in the class PDA notebooks.
 
 #### Task 5 (\*)
 
-This next task should be nice and quick. Using spark, pull in all the `Movie Id, User Id, Date` lines from `qualifying_simple.txt`
-and produce an `RDD` of `(User Id, Movie Id)` (you may ignore the dates). Use the model produced in Task 2 to calculate 
-ratings for every element of this RDD.
+In this task you will tune your model's hyperparameters:  
+
+* _Rank_ = 10
+* _Number of Iterations_ = 5
+* _Lambda_ = 0.01 
+
+for this, build a `ParamGrid` in combination with the `CrossValidator` as seen in class.  
+You should experiment with different parameter and report on the best performance you can achieve (best RMSE / r^2 correlation).
+
+#### Task 6 (\*)
+
+Input File:
+- **qualifying_simple.txt**
+
+Using spark, pull in all the `Movie Id, User Id, Date` lines from `qualifying_simple.txt`
+and produce a DataFrame of `(User Id, Movie Id)` (you may ignore the dates). Use the model produced in Task 2 to calculate 
+ratings for every element of this DataFrame.
 
 Once you have done this, you should write these ratings to a file. 
 
 **Note**: If you use spark's built in `saveAsTextFile` method, you will see that many files are produced, with names like
 `part-0024.txt`. This is due to the fact that the contents of each `RDD` partition (remember that `RDD`s are partitioned 
 and distributed) are written out separately. You do not have to recombine these files.
-
 
 ## Deliverables
 
