@@ -34,7 +34,7 @@ this dataset is used to train the recommender model in **Task 2**, however it is
 
 Instead you will use this smaller dataset:
 
-*mv_sampled.parquet**: this is a subset of the whole ratings file, containing about 1 million ratings. You will use this file in **Task 2** to train your ASL model.
+**mv_sampled.parquet**: this is a subset of the whole ratings file, containing about 1 million ratings. You will use this file in **Task 2** to train your ASL model.
 Note that this is encoded using Spark's column-wise binary format for Dataframes (parquet), which makes it very space-efficient and fast to load. 
 
 * **netflix_movie_titles.txt**: a text file containing roughly 18 thousand lines, corresponding to the same number of movies. Each line is of the format `Id, Year of release, Title`. For example:
