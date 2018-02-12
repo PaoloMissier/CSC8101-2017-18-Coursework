@@ -90,7 +90,7 @@ Below are some helpful links:
 #### Incremental progress
 
 As you can see below, there are several tasks for you to complete in this coursework. Some of them may prove challenging depending upon your prior level of experience.
-If you struggle with Task 1, you can re-start from Task 2 as this requires loading the **mv_sampled.parquet** and therefore does not require you to have completed Task 1.
+If you struggle with Task 1, you can re-start from Task 2 as this requires loading the **mv_sampled.parquet.tar.gz** and therefore does not require you to have completed Task 1.
 
 Additionally we have marked certain tasks with the symbol **(?)** which means  that the task is optional.
 if a task is optional, this simply means that later tasks do not depend on its output. This means you can move on from such a task if you are stuck.
