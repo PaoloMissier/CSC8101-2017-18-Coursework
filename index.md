@@ -82,8 +82,6 @@ Below are some helpful links:
 
 * [Spark Programming Guide](https://spark.apache.org/docs/latest/programming-guide.html)
 * [Spark MLlib Programming Guide](http://spark.apache.org/docs/latest/ml-guide.html)
-* [Neo4j Language Drivers](https://neo4j.com/developer/language-guides/)
-* [Neo4j Cypher Refcard](https://neo4j.com/docs/cypher-refcard/current/)
 
 **Important**: You may notice that on the left hand side of the MLlib page there are links to two versions of each page, one under the heading "MLlib: Main Guide" and one under the heading "MLlib: RDD-based API Guide". You should **follow the Main Guide** as the other guide is now deprecated..
 
@@ -225,9 +223,8 @@ Your task is to find the top 10 most similar users to user *30878*.
 
 At the end of your coursework efforts, you should gather as many of the following as you have managed to produce:
 
-* A `.zip` file containing the src for the spark job
+* A `.zip` file containing the src for the spark job (ie the notebook)
 * A `.txt` file containing the recommendations and ratings for user _30878_ (may be two `.txt` files).
 * A `.zip` file containing all the predicted ratings from `qualifying_simple.txt`. This is likely many text files of the form `part-0000.txt` etc...
-* A `.txt` file containing the Cypher read query asked for in Task 7.
 
 The above files should in turn be placed within a file named `submission.zip` and uploaded to Ness.
